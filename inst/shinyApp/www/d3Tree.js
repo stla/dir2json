@@ -18,7 +18,8 @@ function mouseover(Div) {
         .duration(500)
         .style("opacity", "1")
         .style("display", "block")
-        .style("z-index", "-1");
+        .style("z-index", "-1")
+        .style("width", 12*size.length);
       Div.html("<i>size:</i> " + size)
         .style("left", (d3.event.pageX - 0) + "px")
         .style("top", (d3.event.pageY - 30) + "px");

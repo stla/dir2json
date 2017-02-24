@@ -9,6 +9,7 @@ shinyUI(fluidPage(
     tags$script(src="d3.v3.min.js"),
     tags$script(src="jsondirtree.js"),
     tags$script(src="d3Tree.js"),
+    tags$link(rel="stylesheet", href="font-awesome-4.7.0/css/font-awesome.min.css"),
     tags$link(rel="stylesheet", href="d3Tree.css"),
     tags$script(src="custom_drawTree.js")
   ),
@@ -23,15 +24,20 @@ shinyUI(fluidPage(
   ),
 
   br(),
-  tags$div(id="searchBars", style="display:none;",
-           fluidRow(column(width=12,
-                      tags$select(id="search", style="width:100%", multiple="multiple",
-                              tags$option())
-            )),
-           fluidRow(column(width=12,
-                      tags$select(id="searchExt", style="width:100%", multiple="multiple",
-                                   tags$option())
-           ))
+  tags$div(id="searchBars", style="display:none;", class="container-1",
+           fluidRow(
+             column(width=6,
+                    #tags$span(class="icon", tags$i(class="fa fa-search")),
+                    tags$select(id="search", style="width:100%",
+                                multiple="multiple",
+                                tags$option())
+             ),
+             column(width=6,
+                    #tags$span(class="icon", tags$i(class="fa fa-search")),
+                    tags$select(id="searchExt", style="width:100%", multiple="multiple",
+                                tags$option())
+             )
+           )
   )
 
 

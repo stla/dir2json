@@ -23,7 +23,7 @@ dir2json <- function(dir, depth=NULL){
 #' @export
 #' @import shiny
 #' @importFrom rChoiceDialogs jchoose.dir
-shinyReshape <- function(dat=NULL){
+shinyDirTree <- function(dat=NULL){
   appDir <- system.file("shinyApp", package = "dir2json")
   app <- shiny::shinyAppDir(appDir)
   shiny::runApp(app, display.mode="normal", launch.browser=TRUE)
