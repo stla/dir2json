@@ -10,6 +10,10 @@
 #' @return A string.
 #' @param dir the path of the directory
 #' @param depth a nonnegative integer, the desired depth, or \code{NULL} to search until the end
+#' @examples
+#' dir2json(".", 0)
+#' dir2json(".", 1)
+#' dir2json(Sys.getenv("R_HOME"), 1)
 dir2json <- function(dir, depth=NULL){
   if(!dir.exists(dir)){
     stop(sprintf("Folder %s not found.", dir))
