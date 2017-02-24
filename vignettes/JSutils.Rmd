@@ -1,0 +1,96 @@
+---
+title: "Javascript utilities"
+author: "Stéphane Laurent"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Javascript utilities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(magrittr)
+library(jsonlite)
+library(networkD3)
+library(V8)
+ct <- v8()
+ct$source(system.file("shinyApp", "www", "jsondirtree.js", package="dir2json"))
+```
+
+```{r include=FALSE}
+ct$eval('
+jsontree = {
+	"name": "D0",
+	"_type": "folder",
+	"children": [
+		{
+			"name": "D00",
+			"_type": "folder",
+			"children": [
+				{
+					"name": "file000.txt",
+					"_type": "file",
+					"size": 100
+				},
+				{
+					"name": "file001.txt",
+					"_type": "file",
+					"size": 42
+				}
+			]
+		},
+		{
+			"name": "file01.R",
+			"_type": "file",
+			"size": 99
+		}
+	]
+}
+')
+```
+
+Consider the following JSON representation of a folder:
+
+```js
+`r ct$get('JSON.stringify(jsontree,null,"  ")')`
+```
+
+```{r, echo=FALSE}
+jsontree <- ct$get("JSON.stringify(jsontree)") %>%
+  fromJSON(simplifyDataFrame = FALSE)
+diagonalNetwork(List=jsontree, fontSize=12, opacity=0.95)
+```
+
+- Get all file extensions in the tree:
+
+```js
+> var extensions = getFileExtensions(jsontree)
+`r ct$eval('var extensions = getFileExtensions(jsontree)')
+ct$get('JSON.stringify(extensions)')`
+```
+
+- Get all names in the tree:
+
+```js
+> getAllNames(jsontree)
+`r ct$eval('var allNames = getAllNames(jsontree)')
+ct$get('JSON.stringify(allNames, null, "  ")')`
+```
+
+- Get the file names grouped by extension:
+
+```js
+> fileMapByExtension(jsontree)
+`r ct$eval('var x = fileMapByExtension(jsontree)')
+ct$get('JSON.stringify(x, null, "  ")')`
+```
+
+- Get the path(s) to a node:
+
+```js
+> getPaths(jsontree, "file000.txt")
+`r ct$eval('var thefile = getPaths(jsontree, "file000.txt")')
+ct$get('JSON.stringify(thefile, null, "  ")')`
+```

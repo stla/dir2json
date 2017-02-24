@@ -1,0 +1,8 @@
+inst/doc
+inst/ztemp
+.Rbuildignore
+.Rhistory
+.Rproj.user
+dir2json.Rproj
+man
+*.dll
