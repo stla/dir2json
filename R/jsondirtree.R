@@ -21,13 +21,17 @@ dir2json <- function(dir, depth=NULL){
   .dir2json(dir, ifelse(is.null(depth), -1L, depth))
 }
 
+.dir2jsonEnv <- new.env()
+
 #' @title Shiny app: tree representation of a folder
 #' @description Shiny app to play with a Reingold-Tilford tree network diagram
 #' representing a folder structure
+#' @param dir path to a directory; if \code{NULL}, it is selected in the app
 #' @export
 #' @import shiny
 #' @importFrom rChoiceDialogs jchoose.dir
-shinyDirTree <- function(dat=NULL){
+shinyDirTree <- function(dir=NULL){
+  assign("dir", dir, envir = .dir2jsonEnv)
   appDir <- system.file("shinyApp", package = "dir2json")
   app <- shiny::shinyAppDir(appDir)
   shiny::runApp(app, display.mode="normal", launch.browser=TRUE)

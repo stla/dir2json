@@ -6,4 +6,4 @@ inst/ztemp
 dir2json.Rproj
 man
 *.dll
-inst/shinyApp/www/font-awesome-4.7.0
+*.so

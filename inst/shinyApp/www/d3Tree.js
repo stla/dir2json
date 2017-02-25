@@ -95,20 +95,25 @@ function drawTree(jsondata) {
   //init search box
   $("#search").select2({
     data: searchFile_data,
-    placeholder: "Search a file or a folder in the tree",
+    placeholder: "Search a file or a folder in the tree...",
     containerCssClass: "search"
   });
 
   //search box for files highlighter
   $("#searchExt").select2({
     data: searchByExt_data,
-    placeholder: "Search all these files",
+    placeholder: "Search all these files...",
     containerCssClass: "search"
   });
   // event: highlight class R, pdf, etc (class is attributed on the text)
 
   //attach search box listener
   $("#search").on("select2:select select2:unselect", function(e) {
+    if($(this)[0].selectedOptions.length === 0){
+        $("#icon1").show();
+    }else{
+      $("#icon1").hide();
+    }
     var eventType = e.type;
     var paths = getPaths(root, e.params.data.text); // je pourrais faire un Map
     if (typeof(paths) !== "undefined") {

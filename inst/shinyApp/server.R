@@ -2,6 +2,8 @@ library(shiny)
 library(rChoiceDialogs)
 library(dir2json)
 
+#TODO : dir as argument
+
 dirTree <- function(root){
   bname <- basename(root)
   out <- list(name=bname)
@@ -26,7 +28,12 @@ shinyServer(function(input, output, session) {
   })
 
   RV <- reactiveValues()
-  RV[["dir"]] <- NULL
+  RV[["dir"]] <- get("dir", envir = dir2json:::.dir2jsonEnv)
+
+  output$dirIsNotGiven <- reactive({
+    return(is.null(RV[["dir"]]))
+  })
+  outputOptions(output, 'dirIsNotGiven', suspendWhenHidden=FALSE)
 
   observeEvent(input$chooseDir, {
     RV[["dir"]] <- jchoose.dir()

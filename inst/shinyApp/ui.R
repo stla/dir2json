@@ -14,28 +14,32 @@ shinyUI(fluidPage(
     tags$script(src="custom_drawTree.js")
   ),
 
-  tags$div(id="title",
-    titlePanel("D3 folder structure")
+  conditionalPanel("output.dirIsNotGiven == true",
+                   tags$div(id="title",
+                            titlePanel("D3 folder structure")
+                   )
   ),
 
-  tags$div(id="chooseBar",
-    fluidRow(column(width=12,
-                    wellPanel(actionButton("chooseDir", "Choose a directory"))))
+  conditionalPanel("output.dirIsNotGiven == true",
+                   tags$div(id="chooseBar",
+                            fluidRow(column(width=12,
+                                            wellPanel(actionButton("chooseDir", "Choose a directory"))))
+                   )
   ),
 
   br(),
   tags$div(id="searchBars", style="display:none;", class="container-1",
            fluidRow(
-             column(width=6,
-                    #tags$span(class="icon", tags$i(class="fa fa-search")),
-                    tags$select(id="search", style="width:100%",
+             column(width=6, class="container-2",
+                    tags$select(id="search", style="width:80%;",
                                 multiple="multiple",
-                                tags$option())
+                                tags$option()),
+                    tags$button(class="icon", id="icon1", style="pointer-events:none", tags$i(class="fa fa-search"))
              ),
-             column(width=6,
-                    #tags$span(class="icon", tags$i(class="fa fa-search")),
-                    tags$select(id="searchExt", style="width:100%", multiple="multiple",
-                                tags$option())
+             column(width=6, class="container-2",
+                    tags$select(id="searchExt", style="width:80%", multiple="multiple",
+                                tags$option()),
+                    tags$button(class="icon", id="icon2", tags$i(class="fa fa-search"))
              )
            )
   )
