@@ -94,3 +94,8 @@ ct$get('JSON.stringify(x, null, "  ")')`
 `r ct$eval('var thefile = getPaths(jsontree, "file000.txt")')
 ct$get('JSON.stringify(thefile, null, "  ")')`
 ```
+
+```{r include=FALSE}
+rm(list=ls())
+```
+

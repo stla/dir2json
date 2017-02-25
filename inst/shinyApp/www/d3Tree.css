@@ -1,3 +1,7 @@
+svg {
+    pointer-events: all;
+}
+
 .node {
     cursor: pointer;
 }
@@ -42,7 +46,10 @@
     white-space: nowrap;
     position: relative;
 		background: #606060;
-		padding: 11px;
+		padding-left: 11px;
+    padding-top: 11px;
+    padding-right: 11px;
+    padding-bottom: 30px;
 		border-radius: 10px;
 		z-index: 20;
 }

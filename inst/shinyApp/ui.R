@@ -19,7 +19,9 @@ shinyUI(fluidPage(
     tags$script(src="select2.full.min.js"),
     tags$link(rel="stylesheet", href="select2.min.css"),
     tags$script(src="d3.v3.min.js"),
+    #tags$script(src="d3-zoom.v1.min.js"),
     tags$script(src="jsondirtree.js"),
+    tags$script(src="eventHandlers.js"),
     tags$script(src="d3Tree.js"),
     tags$link(rel="stylesheet", href="font-awesome-4.7.0/css/font-awesome.min.css"),
     tags$link(rel="stylesheet", href="d3Tree.css"),
@@ -36,10 +38,10 @@ shinyUI(fluidPage(
 
   conditionalPanel("output.dirIsNotGiven == true",
                    tags$div(id="chooseBar",
-                            fluidRow(column(width=4,
-                                            wellPanel(numericInput("depth", "Select depth, or leave blank", value=Inf, min=1L)))
+                            fluidRow(column(width=3,
+                                            wellPanel(numericInput("depth", "Set the desired depth, or leave blank", value=Inf, min=1L)))
                             ),
-                            fluidRow(column(width=4,
+                            fluidRow(column(width=3,
                                             wellPanel(actionButton("chooseDir", "Choose a directory")))
                             )
                    )
@@ -59,8 +61,11 @@ shinyUI(fluidPage(
                                 tags$option()),
                     tags$button(class="icon", id="icon2", tags$i(class="fa fa-search"))
              )
-           )
-  )
+           ),
+           span(style="color:gold;float:right;position:relative;", includeMarkdown("www/help.md")
+)
+  ),
 
-
+  br(),
+  div(id="container-tree", style="overflow:auto")
 ))

@@ -1,98 +1,60 @@
-// size, circle, and text are defined in update()
-function mouseover(Div) {
-  return function() {
-    d3.select(this).select("circle").transition()
-      .duration(750)
-      .attr("r", 9);
-
-    d3.select(this).select("text").transition()
-      .duration(750)
-      .style("stroke-width", ".5px")
-      .style("font", "25px sans-serif")
-      .style("top", "5px");
-
-    // FAIRE la taille de Div proportionnel à la longueur de size !
-    var size = d3.select(this).select("size").text();
-    if (size !== "") {
-      Div.transition() //Opacity transition when the tooltip appears
-        .duration(500)
-        .style("opacity", "1")
-        .style("display", "block")
-        .style("z-index", "-1")
-        .style("width", 6+12*size.length);
-      Div.html("<i>size:</i> " + size)
-        .style("left", (d3.event.pageX - 0) + "px")
-        .style("top", (d3.event.pageY - 30) + "px");
-    }
-  };
-}
-
-// mouseout event handler
-function mouseout(Div) {
-  return function() {
-    d3.select(this).select("circle").transition()
-      .duration(750)
-      .attr("r", 4.5);
-
-    d3.select(this).select("text").transition()
-      .duration(750)
-      .style("font", "10px sans-serif")
-      .style("top", "0px");
-    //        .style("opacity", 0);
-
-    if (d3.select(this).select("size").text() !== "") {
-      Div.transition() //Opacity transition when the tooltip disappears
-        .duration(500)
-        .style("opacity", "0")
-        .style("display", "none");
-    }
-  };
-}
 
 function drawTree(jsondata) {
 
-  var div = d3.select("body")
-    .append("div") // declare the tooltip div
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-
-  var margin = {
+  margin = {
       top: 20,
       right: 120,
       bottom: 20,
       left: 120
-    },
-    width = 960 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+    };
+    width = window.innerWidth - margin.right - margin.left - 50;
+    height = 80*jsondata.children.length - margin.top - margin.bottom;
 
-  var i = 0,
-    duration = 750,
-    root = jsondata,
+  id_incr = 0;
+  duration = d3.event && d3.event.altKey ? 5000 : 500;
+  root = jsondata;
+
+  var
     searchFile_data = getAllNames(jsondata),
     searchByExt_data = getFileExtensions(jsondata),
     filemap = fileMapByExtension(jsondata);
 
-  var diameter = 960;
-
-  var tree = d3.layout.tree()
+  tree = d3.layout.tree()
     .size([height, width]);
 
-  var diagonal = d3.svg.diagonal()
+  diagonal = d3.svg.diagonal()
     .projection(function(d) {
       return [d.y, d.x];
     });
 
-  var svg = d3.select("body").append("svg")
+  svg = d3.select("#container-tree").append("svg:svg")
+    .attr("class", "svg_container")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    .style("pointer-events", "all");
+    .style("overflow", "auto")
+    .style("background-color", "#EEEEEE")
+    .append("svg:g")
+    .attr("class", "drawarea")
+    .append("svg:g")
+    .attr("transform", "translate(" + margin.right + "," + margin.top + ")");
+
 
   root.x0 = height / 2;
   root.y0 = 0;
   root.children.forEach(collapse);
+
+  // var botao = d3.select("#form #button");
+  // botao.on("click", function() {
+  //   toggle(root);
+  //   update(root);
+  //   var height = 800;
+  //   tree = d3.layout.tree()
+  //     .size([height, 900]);
+  //   svg.attr("height", height + 50).append("svg:g");
+  // });
+
   update(root);
+
 
   //init search box
   $("#search").select2({
@@ -111,9 +73,9 @@ function drawTree(jsondata) {
 
   //attach search box listener
   $("#search").on("select2:select select2:unselect", function(e) {
-    if($(this)[0].selectedOptions.length === 0){
-        $("#icon1").show();
-    }else{
+    if ($(this)[0].selectedOptions.length === 0) {
+      $("#icon1").show();
+    } else {
       $("#icon1").hide();
     }
     var eventType = e.type;
@@ -134,7 +96,7 @@ function drawTree(jsondata) {
     var extension = e.params.data.text;
     var files = filemap[extension]; // search all files matching
     var paths = [];
-    for(var i=0; i<files.length; i++){
+    for (var i = 0; i < files.length; i++) {
       paths = paths.concat(getPaths(root, files[i]));
     }
     if (eventType == "select2:select") {
@@ -145,168 +107,7 @@ function drawTree(jsondata) {
   });
 
 
-  d3.select(self.frameElement).style("height", "800px");
-
-  function update(source) {
-    // Compute the new tree layout.
-    var nodes = tree.nodes(root).reverse(),
-      links = tree.links(nodes);
-    console.log(nodes);
-
-    // Normalize for fixed-depth.
-    nodes.forEach(function(d) {
-      d.y = d.depth * 180;
-    });
-
-    // Update the nodes
-    // div déjà déclaré au début de la fonction drawtree !!!!
-    //    var Div = d3.select("body")
-    //            .append("div")
-    //            .attr("class", "tooltip")
-    //            .style("opacity", "0")
-    //            .style("display", "none");
-    var Div = div.style("display", "none");
-    var node = svg.selectAll("g.node")
-      .data(nodes, function(d) {
-        return d.id || (d.id = ++i);
-      })
-      .on("mouseover", mouseover(Div))
-      .on("mouseout", mouseout(Div));
-
-
-    // Enter any new nodes at the parent's previous position.
-    var nodeEnter = node.enter().append("g")
-      .attr("class", "node")
-      .attr("transform", function(d) {
-        return "translate(" + source.y0 + "," + source.x0 + ")";
-      })
-      .on("click", click); // to display children
-
-    //SL : style pour empty folder ici
-    nodeEnter.append("circle")
-      .attr("r", 1e-6)
-      .style("fill", function(d) {
-        if(d._type == "file"){
-          return "#fff";
-        }else{
-          return d._children ? "lightsteelblue" : "yellow";
-        }
-      });
-
-    nodeEnter.append("text")
-      .attr("x", function(d) {
-        return d.children || d._children ? -10 : 10;
-      })
-      .attr("dy", ".35em")
-      .attr("text-anchor", function(d) {
-        return d.children || d._children ? "end" : "start";
-      })
-      .text(function(d) {
-        return d.name;
-      })
-      .style("fill-opacity", 1e-6)
-      .attr("class", function(d) {
-        return basefilename(d.name);
-      });
-
-    //SL append size
-    nodeEnter.append("size")
-      .text(function(d) {
-        return d.size;
-      });
-
-    // Transition nodes to their new position.
-    var nodeUpdate = node.transition()
-      .duration(duration)
-      .attr("transform", function(d) {
-        return "translate(" + d.y + "," + d.x + ")";
-      });
-
-    nodeUpdate.select("circle")
-      .attr("r", 4.5)
-      .style("fill", function(d) {
-        if (d.class === "found") {
-          return "#ff4136"; //red
-        } else if (d._children) {
-          return "lightsteelblue";
-        } else {
-          return "#fff";
-        }
-      })
-      .style("stroke", function(d) {
-        if (d.class === "found") {
-          return "#ff4136"; //red
-        }
-      });
-
-    nodeUpdate.select("text")
-      .style("fill-opacity", 1);
-
-    // Transition exiting nodes to the parent's new position.
-    var nodeExit = node.exit().transition()
-      .duration(duration)
-      .attr("transform", function(d) {
-        return "translate(" + source.y + "," + source.x + ")";
-      })
-      .remove();
-
-    nodeExit.select("circle")
-      .attr("r", 1e-6);
-
-    nodeExit.select("text")
-      .style("fill-opacity", 1e-6);
-
-    // Update the linksâ€¦
-    var link = svg.selectAll("path.link")
-      .data(links, function(d) {
-        return d.target.id;
-      });
-
-    // Enter any new links at the parent's previous position.
-    link.enter().insert("path", "g")
-      .attr("class", "link")
-      .attr("d", function(d) {
-        var o = {
-          x: source.x0,
-          y: source.y0
-        };
-        return diagonal({
-          source: o,
-          target: o
-        });
-      });
-
-    // Transition links to their new position.
-    link.transition()
-      .duration(duration)
-      .attr("d", diagonal)
-      .style("stroke", function(d) {
-        if (d.target.class === "found") {
-          return "#ff4136";
-        }
-      });
-
-    // Transition exiting nodes to the parent's new position.
-    link.exit().transition()
-      .duration(duration)
-      .attr("d", function(d) {
-        var o = {
-          x: source.x,
-          y: source.y
-        };
-        return diagonal({
-          source: o,
-          target: o
-        });
-      })
-      .remove();
-
-    // Stash the old positions for transition.
-    nodes.forEach(function(d) {
-      d.x0 = d.x;
-      d.y0 = d.y;
-    });
-  }
+  //d3.select(self.frameElement).style("height", "800px");
 
   //recursively collapse children
   function collapse(d) {
@@ -315,18 +116,6 @@ function drawTree(jsondata) {
       d._children.forEach(collapse);
       d.children = null;
     }
-  }
-
-  // Toggle children on click.
-  function click(d) {
-    if (d.children) {
-      d._children = d.children;
-      d.children = null;
-    } else {
-      d.children = d._children;
-      d._children = null;
-    }
-    update(d);
   }
 
   function openPaths(paths) {
@@ -354,5 +143,193 @@ function drawTree(jsondata) {
       }
     }
   }
+
+}
+
+function update(source) {
+  // div for tooltips
+  Div = d3.select("body")
+    .append("div") // declare the tooltip div
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+    links = tree.links(nodes);
+  console.log(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) {
+    d.y = d.depth * 180;
+  });
+
+  // Update the nodes
+  var node = svg.selectAll("g.node")
+    .data(nodes, function(d) {
+      return d.id || (d.id = ++id_incr);
+    })
+    .on("mouseover", mouseover(Div))
+    .on("mouseout", mouseout(Div));
+
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("svg:g")
+    .attr("class", "node")
+    .attr("transform", function(d) {
+      return "translate(" + source.y0 + "," + source.x0 + ")";
+    })
+    .on("click", function(d) {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      update(d);
+    }); // to display children
+
+  //SL : style pour empty folder ici
+  nodeEnter.append("circle")
+    .attr("r", 1e-6)
+    .style("fill", function(d) {
+      if (d._type == "file") {
+        return "#fff";
+      } else {
+        return d._children ? "lightsteelblue" : "yellow";
+      }
+    });
+
+  nodeEnter.append("text")
+    .attr("x", function(d) {
+      return d.children || d._children ? -10 : 10;
+    })
+    .attr("dy", ".35em")
+    .attr("text-anchor", function(d) {
+      return d.children || d._children ? "end" : "start";
+    })
+    .text(function(d) {
+      return d.name;
+    })
+    .style("fill-opacity", 1e-6)
+    .attr("class", function(d) {
+      return basefilename(d.name);
+    });
+
+  //SL append size
+  nodeEnter.append("size")
+    .text(function(d) {
+      return d.size;
+    });
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+    .duration(duration)
+    .attr("transform", function(d) {
+      return "translate(" + d.y + "," + d.x + ")";
+    });
+
+  nodeUpdate.select("circle")
+    .attr("r", 4.5)
+    .style("fill", function(d) {
+      if (d.class === "found") {
+        return "#ff4136"; //red
+      } else if (d._children) {
+        return "lightsteelblue";
+      } else {
+        return "#fff";
+      }
+    })
+    .style("stroke", function(d) {
+      if (d.class === "found") {
+        return "#ff4136"; //red
+      }
+    });
+
+  nodeUpdate.select("text")
+    .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+    .duration(duration)
+    .attr("transform", function(d) {
+      return "translate(" + source.y + "," + source.x + ")";
+    })
+    .remove();
+
+  nodeExit.select("circle")
+    .attr("r", 1e-6);
+
+  nodeExit.select("text")
+    .style("fill-opacity", 1e-6);
+
+  // Update the linksâ€¦
+  var link = svg.selectAll("path.link")
+    .data(links, function(d) {
+      return d.target.id;
+    });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("svg:path", "g")
+    .attr("class", "link")
+    .attr("d", function(d) {
+      var o = {
+        x: source.x0,
+        y: source.y0
+      };
+      return diagonal({
+        source: o,
+        target: o
+      });
+    });
+
+  // Transition links to their new position.
+  link.transition()
+    .duration(duration)
+    .attr("d", diagonal)
+    .style("stroke", function(d) {
+      if (d.target.class === "found") {
+        return "#ff4136";
+      }
+    });
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+    .duration(duration)
+    .attr("d", function(d) {
+      var o = {
+        x: source.x,
+        y: source.y
+      };
+      return diagonal({
+        source: o,
+        target: o
+      });
+    })
+    .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+    d.x0 = d.x;
+    d.y0 = d.y;
+  });
+
+  nclicks=1;
+  d3.select("svg")
+      .call(d3.behavior.zoom()
+            .scaleExtent([0.5, 5])
+            .on("zoom", zoom) // https://github.com/d3/d3-zoom
+            // .on("wheel.zoom", null) // https://github.com/d3/d3-3.x-api-reference/blob/master/Zoom-Behavior.md
+            .on("zoomend", function(event){
+               console.log("zoomend");
+            })
+          )
+      .on("dblclick", function(){
+         var scale = d3.event.shiftKey ? 0.5 : 2;
+         var drawareaContainer = d3.select("svg");
+         drawareaContainer.attr("height", scale*drawareaContainer.attr("height"));
+      });
+
 
 }
