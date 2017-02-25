@@ -4,6 +4,18 @@ library(shiny)
 shinyUI(fluidPage(
 
   tags$head(
+    conditionalPanel(
+      condition = "$('html').hasClass('shiny-busy')",
+      tags$div(
+        style = "float:right; padding-right:10px; padding-top:10px;",
+        tags$img(
+          src = "spinner.gif",
+          height = 120,
+          width = 120
+        )
+      ),
+      tags$div(style = "float:right; padding-right:10px; padding-top:10px; color:red; background-color:white; font-family:arial; font-size:17px", "Calculating... Please wait...")
+    ),
     tags$script(src="select2.full.min.js"),
     tags$link(rel="stylesheet", href="select2.min.css"),
     tags$script(src="d3.v3.min.js"),
@@ -14,6 +26,8 @@ shinyUI(fluidPage(
     tags$script(src="custom_drawTree.js")
   ),
 
+  #verbatimTextOutput("value"),
+
   conditionalPanel("output.dirIsNotGiven == true",
                    tags$div(id="title",
                             titlePanel("D3 folder structure")
@@ -22,8 +36,12 @@ shinyUI(fluidPage(
 
   conditionalPanel("output.dirIsNotGiven == true",
                    tags$div(id="chooseBar",
-                            fluidRow(column(width=12,
-                                            wellPanel(actionButton("chooseDir", "Choose a directory"))))
+                            fluidRow(column(width=4,
+                                            wellPanel(numericInput("depth", "Select depth, or leave blank", value=Inf, min=1L)))
+                            ),
+                            fluidRow(column(width=4,
+                                            wellPanel(actionButton("chooseDir", "Choose a directory")))
+                            )
                    )
   ),
 

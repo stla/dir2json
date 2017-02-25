@@ -8,8 +8,8 @@ function mouseover(Div) {
     d3.select(this).select("text").transition()
       .duration(750)
       .style("stroke-width", ".5px")
-      .style("font", "25px sans-serif"); // FAIRE un shift vers le bas
-    //.style("opacity", 1);
+      .style("font", "25px sans-serif")
+      .style("top", "5px");
 
     // FAIRE la taille de Div proportionnel à la longueur de size !
     var size = d3.select(this).select("size").text();
@@ -19,7 +19,7 @@ function mouseover(Div) {
         .style("opacity", "1")
         .style("display", "block")
         .style("z-index", "-1")
-        .style("width", 12*size.length);
+        .style("width", 6+12*size.length);
       Div.html("<i>size:</i> " + size)
         .style("left", (d3.event.pageX - 0) + "px")
         .style("top", (d3.event.pageY - 30) + "px");
@@ -36,7 +36,8 @@ function mouseout(Div) {
 
     d3.select(this).select("text").transition()
       .duration(750)
-      .style("font", "10px sans-serif");
+      .style("font", "10px sans-serif")
+      .style("top", "0px");
     //        .style("opacity", 0);
 
     if (d3.select(this).select("size").text() !== "") {
@@ -62,7 +63,7 @@ function drawTree(jsondata) {
       left: 120
     },
     width = 960 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+    height = 80*jsondata.children.length - margin.top - margin.bottom;
 
   var i = 0,
     duration = 750,
@@ -85,7 +86,8 @@ function drawTree(jsondata) {
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .style("pointer-events", "all");
 
   root.x0 = height / 2;
   root.y0 = 0;
@@ -185,7 +187,11 @@ function drawTree(jsondata) {
     nodeEnter.append("circle")
       .attr("r", 1e-6)
       .style("fill", function(d) {
-        return d._children ? "lightsteelblue" : "#fff";
+        if(d._type == "file"){
+          return "#fff";
+        }else{
+          return d._children ? "lightsteelblue" : "yellow";
+        }
       });
 
     nodeEnter.append("text")
@@ -203,7 +209,6 @@ function drawTree(jsondata) {
       .attr("class", function(d) {
         return basefilename(d.name);
       });
-
 
     //SL append size
     nodeEnter.append("size")

@@ -27,8 +27,11 @@ shinyServer(function(input, output, session) {
     # quit()
   })
 
+  output$value <- renderText({ input$depth })
+
   RV <- reactiveValues()
-  RV[["dir"]] <- get("dir", envir = dir2json:::.dir2jsonEnv)
+  RV[["dir"]] <- dir2json:::.dir2jsonEnv$dir
+  RV[["depth"]] <- dir2json:::.dir2jsonEnv$depth
 
   output$dirIsNotGiven <- reactive({
     return(is.null(RV[["dir"]]))
@@ -41,8 +44,10 @@ shinyServer(function(input, output, session) {
 
   observeEvent(RV[["dir"]], {
     if(!is.null(dir <- RV[["dir"]])){
+      depth <- ifelse(is.null(RV[["depth"]]), input$depth, RV[["depth"]])
+      if(is.numeric(depth) && depth==0) depth <- 1L
       session$sendCustomMessage("drawTree",
-                                list(dirTree=dirTree(dir)))
+                                list(dirTree=dir2json(dir, depth)))
     }
   })
 

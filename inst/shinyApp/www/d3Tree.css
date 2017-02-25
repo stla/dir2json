@@ -26,6 +26,7 @@
 .tooltip {
     position: absolute;
     text-align: center;
+    vertical-align: middle;
     /*  width: 60px; */
     height: 28px;
     padding: 2px;
