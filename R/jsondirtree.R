@@ -37,7 +37,7 @@ assignNullValues <- function(){
 #' @import shiny
 #' @importFrom rChoiceDialogs jchoose.dir
 shinyDirTree <- function(dir=NULL, depth=NULL){
-  assign("dir", dir, envir = .dir2jsonEnv)
+  assign("dir", normalizePath(dir), envir = .dir2jsonEnv)
   assign("depth", depth, envir = .dir2jsonEnv)
   on.exit(assignNullValues())
   appDir <- system.file("shinyApp", package = "dir2json")

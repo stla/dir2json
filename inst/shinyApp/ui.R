@@ -62,7 +62,7 @@ shinyUI(fluidPage(
                     tags$button(class="icon", id="icon2", tags$i(class="fa fa-search"))
              )
            ),
-           span(style="color:gold;float:right;position:relative;", includeMarkdown("www/help.md")
+           span(style="color:gold;float:right;position:relative;padding-top:5px", includeMarkdown("www/help.md")
 )
   ),
 

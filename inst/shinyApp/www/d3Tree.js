@@ -190,24 +190,13 @@ function update(source) {
       update(d);
     }); // to display children
 
-  //SL : style pour empty folder ici
-  nodeEnter.append("circle")
-    .attr("r", 1e-6)
-    .style("fill", function(d) {
-      if (d._type == "file") {
-        return "#fff";
-      } else {
-        return d._children ? "lightsteelblue" : "yellow";
-      }
-    });
-
   nodeEnter.append("text")
     .attr("x", function(d) {
-      return d.children || d._children ? -10 : 10;
+      return d._type == "folder" ? -10 : 10;
     })
     .attr("dy", ".35em")
     .attr("text-anchor", function(d) {
-      return d.children || d._children ? "end" : "start";
+      return d._type == "folder" ? "end" : "start";
     })
     .text(function(d) {
       return d.name;
@@ -230,6 +219,18 @@ function update(source) {
       return "translate(" + d.y + "," + d.x + ")";
     });
 
+  //SL : gold for empty folder
+  // problem : non-empty folder at leaves are gold
+  nodeEnter.append("circle")
+    .attr("r", 1e-6)
+    .style("fill", function(d) {
+      if (d._type == "file") {
+        return "#fff";
+      } else {
+        return d._children ? "lightsteelblue" : "gold";
+      }
+    });
+
   nodeUpdate.select("circle")
     .attr("r", 4.5)
     .style("fill", function(d) {
@@ -238,7 +239,7 @@ function update(source) {
       } else if (d._children) {
         return "lightsteelblue";
       } else {
-        return "#fff";
+        return d._type == "file" ? "#fff" : "gold";
       }
     })
     .style("stroke", function(d) {
