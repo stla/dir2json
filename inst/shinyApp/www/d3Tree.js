@@ -63,7 +63,7 @@ function drawTree(jsondata) {
       left: 120
     },
     width = 960 - margin.right - margin.left,
-    height = 80*jsondata.children.length - margin.top - margin.bottom;
+    height = 800 - margin.top - margin.bottom;
 
   var i = 0,
     duration = 750,
@@ -149,10 +149,9 @@ function drawTree(jsondata) {
 
   function update(source) {
     // Compute the new tree layout.
-    // SL filtrer ici (pdf, etc)   ?
     var nodes = tree.nodes(root).reverse(),
       links = tree.links(nodes);
-    console.log(nodes); // me semble OK pour filtrer
+    console.log(nodes);
 
     // Normalize for fixed-depth.
     nodes.forEach(function(d) {
