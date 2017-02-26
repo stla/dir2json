@@ -8,8 +8,9 @@ function mouseover(Div) {
     d3.select(this).select("text").transition()
       .duration(750)
       .style("stroke-width", ".5px")
-      .style("font", "25px sans-serif")
-      .attr("transform", "translate(0,-40)");
+      .style("font", "20px sans-serif")
+      .style("fill", "blue")
+      .attr("transform", "translate(0,25)");
 
     // FAIRE la taille de Div proportionnel à la longueur de size !
     var size = d3.select(this).select("size").text();
@@ -22,7 +23,7 @@ function mouseover(Div) {
         .style("width", 6 + 12 * size.length);
       Div.html("<i>size:</i> " + size)
         .style("left", (d3.event.pageX - 0) + "px")
-        .style("top", (d3.event.pageY - 30) + "px");
+        .style("top", (d3.event.pageY - 32) + "px");
     }
   };
 }
@@ -48,7 +49,7 @@ function mouseout(Div) {
   };
 }
 
-function zoom() {
+function zoom() { // http://stackoverflow.com/questions/17405638/d3-js-zooming-and-panning-a-collapsible-tree-diagram
   var scale = d3.event.scale,
     translation = d3.event.translate,
     tbound = -height * scale,

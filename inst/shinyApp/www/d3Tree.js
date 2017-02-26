@@ -227,7 +227,7 @@ function update(source) {
       if (d._type == "file") {
         return "#fff";
       } else {
-        return d._children ? "lightsteelblue" : "gold";
+        return d._children || d.children ? "lightsteelblue" : "gold";
       }
     });
 
@@ -236,7 +236,7 @@ function update(source) {
     .style("fill", function(d) {
       if (d.class === "found") {
         return "#ff4136"; //red
-      } else if (d._children) {
+      } else if (d._children || d.children) {
         return "lightsteelblue";
       } else {
         return d._type == "file" ? "#fff" : "gold";
@@ -265,7 +265,7 @@ function update(source) {
   nodeExit.select("text")
     .style("fill-opacity", 1e-6);
 
-  // Update the linksâ€¦
+  // Update the links
   var link = svg.selectAll("path.link")
     .data(links, function(d) {
       return d.target.id;
@@ -319,10 +319,10 @@ function update(source) {
   nclicks=1;
   d3.select("svg")
       .call(d3.behavior.zoom()
-            .scaleExtent([0.5, 5])
+            .scaleExtent([0.5, 5]) // links:
             .on("zoom", zoom) // https://github.com/d3/d3-zoom
             // .on("wheel.zoom", null) // https://github.com/d3/d3-3.x-api-reference/blob/master/Zoom-Behavior.md
-            .on("zoomend", function(event){
+            .on("zoomend", function(event){ // http://stackoverflow.com/questions/27403744/how-to-use-shift-click-in-javascript
                console.log("zoomend");
             })
           )
