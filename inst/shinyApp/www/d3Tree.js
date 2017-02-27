@@ -319,8 +319,9 @@ function update(source) {
   nclicks=1;
   d3.select("svg")
       .call(d3.behavior.zoom()
-            .scaleExtent([0.5, 5]) // links:
-            .on("zoom", zoom) // https://github.com/d3/d3-zoom
+            .scaleExtent([0.5, 10]) // min and max scale - useful ?...
+            // .scale(1.1) marche une seule fois...
+            .on("zoom", zoom) // LINKS: https://github.com/d3/d3-zoom
             // .on("wheel.zoom", null) // https://github.com/d3/d3-3.x-api-reference/blob/master/Zoom-Behavior.md
             .on("zoomend", function(event){ // http://stackoverflow.com/questions/27403744/how-to-use-shift-click-in-javascript
                console.log("zoomend");

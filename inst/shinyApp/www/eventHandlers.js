@@ -61,6 +61,7 @@ function zoom() { // http://stackoverflow.com/questions/17405638/d3-js-zooming-a
     Math.max(Math.min(translation[0], rbound), lbound),
     Math.max(Math.min(translation[1], bbound), tbound)
   ];
+  console.log(scale);
   var temp = d3.select(".drawarea")
     .attr("transform", "translate(" + translation + ")" +
       " scale(" + scale + ")");
