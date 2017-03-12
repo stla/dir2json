@@ -1,15 +1,15 @@
 Package: dir2json
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 1.0
+Title: Directory to JSON, and a Shiny Application
+Version: 2.0.0
 Author: Stéphane Laurent
-Maintainer: Stéphane Laurent <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
+Description: Hiearchical structure of a folder as a JSON string, and a Shiny application.
+    Also returns the tree view of a folder.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
     testthat
