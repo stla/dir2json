@@ -2,9 +2,10 @@ Package: dir2json
 Type: Package
 Title: Directory to JSON, and a Shiny Application
 Version: 2.0.0
+Date: 2017-03-12
 Author: Stéphane Laurent
 Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
-Description: Hiearchical structure of a folder as a JSON string, and a Shiny application.
+Description: Hierarchical structure of a folder as a JSON string, and a Shiny application.
     Also returns the tree view of a folder.
 License: GPL-3
 Encoding: UTF-8
