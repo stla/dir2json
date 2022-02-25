@@ -4,14 +4,18 @@
 \alias{shinyDirTree}
 \title{Shiny app: tree representation of a folder}
 \usage{
-shinyDirTree(dir = NULL, depth = NULL)
+shinyDirTree(dir = NULL, depth = NULL, searchByExtension = TRUE)
 }
 \arguments{
 \item{dir}{path to a directory; if \code{NULL}, it is selected in the app}
 
-\item{depth}{the desired depth, ignored if \code{dir=NULL}; see \code{\link{dir2json}}}
+\item{depth}{the desired depth, ignored if \code{dir=NULL}; 
+see \code{\link{dir2json}}}
+
+\item{searchByExtension}{Boolean, whether to include a search bar in the 
+app to search files by their extension}
 }
 \description{
 Shiny app to play with a Reingold-Tilford tree network diagram
-representing a folder structure
+  representing a folder structure.
 }

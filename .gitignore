@@ -1,8 +1,6 @@
-inst/doc
-inst/ztemp
-.Rbuildignore
-.Rhistory
 .Rproj.user
-dir2json.Rproj
-*.dll
-
+.Rhistory
+.RData
+.Ruserdata
+inst/doc
+build

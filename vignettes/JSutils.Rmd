@@ -57,7 +57,7 @@ Consider the following JSON representation of a folder:
 `r ct$get('JSON.stringify(jsontree,null,"  ")')`
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.width=6}
 jsontree <- ct$get("JSON.stringify(jsontree)") %>%
   fromJSON(simplifyDataFrame = FALSE)
 diagonalNetwork(List=jsontree, fontSize=12, opacity=0.95)

@@ -55,7 +55,7 @@ svg {
 }
 
 [class^='select2'] {
-  border-radius: 0px !important;
+    border-radius: 0px !important;
 }
 
 .search {

@@ -1,23 +1,16 @@
 Package: dir2json
 Type: Package
-Title: Directory to JSON, and a Shiny Application
-Version: 2.0.1
-Date: 2017-03-12
+Title: Shiny Application for an Interactive Tree View of a Folder or Hierarchical Data 
+Version: 3.0.0
+Date: 2022-02-25
 Author: Stéphane Laurent
-Maintainer: Stéphane Laurent <laurent_step@yahoo.fr>
-Description: Hierarchical structure of a folder as a JSON string, and a Shiny application.
+Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
+Description: Hierarchical structure of a folder as a JSON string, and a Shiny application to represent hierarchical data (such as the content of a folder) as an interactive D3 tree.
     Also returns the tree view of a folder.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.0.1
-Suggests: knitr,
-    rmarkdown,
-    testthat
-VignetteBuilder: knitr,
-    magrittr,
-    V8,
-    networkD3,
-    jsonlite
-Imports: shiny,
-    rChoiceDialogs
+RoxygenNote: 7.1.2
+Suggests: knitr, rmarkdown, testthat, tibble
+VignetteBuilder: knitr, magrittr, V8, networkD3, jsonlite
+Imports: shiny, rChoiceDialogs, stringi, readxl
+NeedsCompilation: no

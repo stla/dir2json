@@ -9,7 +9,8 @@ dir2tree(dir, depth = NULL, vertical = FALSE)
 \arguments{
 \item{dir}{the path of the directory}
 
-\item{depth}{a nonnegative integer, the desired depth, or \code{NULL} (default) to search until the end}
+\item{depth}{a nonnegative integer, the desired depth, or \code{NULL} 
+(default) to search until the end}
 
 \item{vertical}{logical, whether to get a vertical tree}
 }
@@ -17,7 +18,7 @@ dir2tree(dir, depth = NULL, vertical = FALSE)
 A string.
 }
 \description{
-Returns the hiearchical structure of a folder as a tree.
+Returns the hierarchical structure of a folder as a tree.
 }
 \examples{
 cat(dir2tree(".", 1))

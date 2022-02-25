@@ -1,10 +1,10 @@
 .onLoad <- function(libname, pkgname) {
-  library.dynam("JsonDirTreeR", pkgname, libname, now=TRUE)
+  library.dynam("JsonDirTree", pkgname, libname, now = TRUE)
   .C("HsStart")
   invisible()
 }
 
 .onUnLoad <- function(libpath) {
-  library.dynam.unload("JsonDirTreeR", libpath)
+  library.dynam.unload("JsonDirTree", libpath)
   invisible()
 }

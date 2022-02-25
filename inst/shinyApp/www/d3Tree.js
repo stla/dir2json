@@ -1,14 +1,18 @@
 
-function drawTree(jsondata) {
+function drawTree(jsondata, rootNode) {
 
+  if(!rootNode){
+    jsondata = jsondata.children[0];
+  }
+  
   margin = {
       top: 20,
       right: 120,
       bottom: 20,
       left: 120
     };
-    width = window.innerWidth - margin.right - margin.left - 50;
-    height = 80*jsondata.children.length - margin.top - margin.bottom;
+  width = window.innerWidth - margin.right - margin.left - 50;
+  height = 70*Object.entries(jsondata).flat().length - margin.top - margin.bottom;
 
   id_incr = 0;
   duration = d3.event && d3.event.altKey ? 5000 : 500;
@@ -18,6 +22,8 @@ function drawTree(jsondata) {
     searchFile_data = getAllNames(jsondata),
     searchByExt_data = getFileExtensions(jsondata),
     filemap = fileMapByExtension(jsondata);
+    
+  searchFile_data.sort((a,b) => (a.text > b.text ? 1: -1));
 
   tree = d3.layout.tree()
     .size([height, width]);
@@ -59,7 +65,7 @@ function drawTree(jsondata) {
   //init search box
   $("#search").select2({
     data: searchFile_data,
-    placeholder: "Search a file or a folder in the tree...",
+    placeholder: "Search in the tree...",
     containerCssClass: "search"
   });
 
@@ -328,7 +334,7 @@ function update(source) {
             })
           )
       .on("dblclick", function(){
-         var scale = d3.event.shiftKey ? 0.5 : 2;
+         var scale = d3.event.shiftKey ? 1/1.1 : 1.1;
          var drawareaContainer = d3.select("svg");
          drawareaContainer.attr("height", scale*drawareaContainer.attr("height"));
       });

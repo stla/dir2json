@@ -56,13 +56,17 @@ function getAllNames(jsontree) {
     if (node.children) {
       for (var i = 0; i < node.children.length; i++) {
         index = extract_select2_data(node.children[i], leaves, index)[0];
+        leaves.push({
+          id: ++index,
+          text: node.children[i].name
+        });
       }
-    } else {
+    } /* else {
       leaves.push({
         id: ++index,
         text: node.name
       });
-    }
+    } */
     return [index, leaves];
   })(jsontree, [], 0)[1];
 }
@@ -110,3 +114,25 @@ function filterTree(obj, search, path) {
     return path;
   }
 }
+
+const orderFilesAndFolders = (obj) => {
+  if (Array.isArray(obj)) {
+    obj.sort((a, b) => {
+      if (a._type === "file" && b._type === "folder") {
+        return 1;
+      } else if (a._type === "folder" && b._type === "file") {
+        return -1;
+      } else if (
+        (a._type === "folder" && b._type === "folder") ||
+        (a._type === "file" && b._type === "file")
+      ) {
+        return a.name.localeCompare(b.name);
+      }
+    });
+    obj.forEach((subItem) => {
+      subItem.children && orderFilesAndFolders(subItem.children);
+    });
+  } else {
+    obj.children && orderFilesAndFolders(obj.children);
+  }
+};

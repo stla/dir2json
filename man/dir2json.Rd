@@ -9,7 +9,8 @@ dir2json(dir, depth = NULL)
 \arguments{
 \item{dir}{the path of the directory}
 
-\item{depth}{a nonnegative integer, the desired depth, or \code{NULL} (default) to search until the end}
+\item{depth}{a nonnegative integer, the desired depth, or \code{NULL} 
+(default) to search until the end}
 }
 \value{
 A string.
