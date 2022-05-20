@@ -65,7 +65,7 @@ shinyUI(fluidPage(
           wellPanel(
             numericInput(
               "depth", "Set the desired depth, or leave blank", 
-              value = Inf, min = 1L
+              value = NA, min = 1L
             )
           )
         )

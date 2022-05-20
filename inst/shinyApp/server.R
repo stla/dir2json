@@ -20,7 +20,11 @@ dirTree <- function(root){
   out
 }
 
-rootNode <- isTRUE(dir2json:::.dir2jsonEnv[["root"]])
+rootNode <- xor(
+  isTRUE(dir2json:::.dir2jsonEnv[["root"]]),
+  isTRUE(dir2json:::.dir2jsonEnv[["noroot"]])
+)
+print(rootNode)
 
 
 shinyServer(function(input, output, session){

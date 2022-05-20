@@ -57,6 +57,7 @@ shinyDirTree <- function(dir = NULL, depth = NULL, searchByExtension = TRUE){
   )
   assign("depth", depth, envir = .dir2jsonEnv)
   assign("searchByExtension", searchByExtension, envir = .dir2jsonEnv)
+  assign("root", TRUE, envir = .dir2jsonEnv)
   on.exit(assignNullValues())
   appDir <- system.file("shinyApp", package = "dir2json")
   app <- shinyAppDir(appDir)
@@ -111,7 +112,7 @@ shinyDataTree <- function(dat, root = TRUE){
   if(!root && length(unique(dat[[1L]])) > 1L){
     root <- TRUE
   }
-  assign("root", root, envir = .dir2jsonEnv)
+  assign("noroot", !root, envir = .dir2jsonEnv)
   assign("tooltips", FALSE, envir = .dir2jsonEnv)
   TMPDIR <- createFolder(dat)
   shinyDirTree(TMPDIR, searchByExtension = FALSE)

@@ -38,7 +38,7 @@ function drawTree(jsondata, rootNode) {
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
     .style("overflow", "auto")
-    .style("background-color", "#EEEEEE")
+    .style("background-color", "seaShell")
     .append("svg:g")
     .attr("class", "drawarea")
     .append("svg:g")
